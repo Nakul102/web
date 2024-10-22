@@ -7,19 +7,34 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css">
     <link rel="stylesheet" href="style.css"> <!-- Include the CSS file -->
 </head>
-<body class="flex items-center justify-center min-h-screen">
-    <div class="login-container w-full max-w-sm">
-        <h1 class="text-3xl font-bold mb-4 text-center">Login</h1>
+<body class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="login-container w-full max-w-sm p-6 bg-white shadow-md rounded-lg">
+        <h1 class="text-3xl font-bold mb-4 text-center text-blue-600">Login</h1>
         <form id="loginForm">
             <input type="email" id="email" placeholder="Email" class="w-full p-3 mb-4 border rounded-lg" required>
             <input type="password" id="password" placeholder="Password" class="w-full p-3 mb-6 border rounded-lg" required>
             <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700">Login</button>
         </form>
+        <p id="errorMessage" class="text-red-500 mt-2 text-center hidden"></p> <!-- Error message -->
     </div>
     <script>
         const loginForm = document.getElementById('loginForm');
+        const errorMessage = document.getElementById('errorMessage');
+        
         loginForm.addEventListener('submit', function (e) {
             e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Basic validation for demonstration
+            if (email === '' || password === '') {
+                errorMessage.textContent = 'Please fill in all fields.';
+                errorMessage.classList.remove('hidden');
+                return;
+            }
+
+            // You can implement more complex authentication logic here
+
             localStorage.setItem('loggedIn', 'true');
             window.location.href = 'dashboard.html';
         });

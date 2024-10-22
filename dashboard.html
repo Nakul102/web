@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Health Dashboard</title>
+    <link rel="stylesheet" href="style.css"> <!-- Include the CSS file -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+    <div class="flex">
+        <!-- Sidebar -->
+        <nav>
+            <h2>Menu</h2>
+            <button onclick="logout()">Logout</button>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="flex-1 p-6">
+            <!-- Header -->
+            <header>
+                <h1>Health Dashboard</h1>
+            </header>
+
+            <!-- Dashboard Stats and Charts -->
+            <div class="grid grid-cols-3 gap-6">
+                <!-- Bar Chart -->
+                <div class="col-span-2 card">
+                    <canvas id="barChart"></canvas>
+                </div>
+
+                <!-- Health Stats Widgets -->
+                <div class="card">
+                    <h2>Heart Rate</h2>
+                    <p id="heartRate">72 BPM</p>
+                    <input type="range" id="heartRateSlider" min="60" max="100" value="72">
+                </div>
+
+                <div class="card">
+                    <h2>Steps Taken</h2>
+                    <p id="steps">0</p>
+                    <input type="range" id="stepsSlider" min="0" max="10000" value="0">
+                </div>
+
+                <div class="card">
+                    <h2>Calories Burned</h2>
+                    <p id="calories">0</p>
+                    <input type="range" id="caloriesSlider" min="0" max="500" value="0">
+                </div>
+
+                <!-- Donut Chart -->
+                <div class="card col-span-2">
+                    <canvas id="donutChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const socket = io('https://data.gdscnsut.com');
+
+        // Update widgets and charts based on slider values
+        function updateValues() {
+            const heartRate = document.getElementById('heartRateSlider').value;
+            const steps = document.getElementById('stepsSlider').value;
+            const calories = document.getElementById('caloriesSlider').value;
+
+            document.getElementById('heartRate').innerText = `${heartRate} BPM`;
+            document.getElementById('steps').innerText = `${steps}`;
+            document.getElementById('calories').innerText = `${calories}`;
+
+            // Update charts based on the slider values
+            barChart.data.datasets[0].data = [steps, steps * 2, steps * 3, steps * 4, steps * 5, steps * 6, steps * 7];
+            barChart.update();
+
+            donutChart.data.datasets[0].data = [calories, steps / 1000, calories / 10]; // Example data for donut chart
+            donutChart.update();
+        }
+
+        // Set up event listeners for sliders
+        document.getElementById('heartRateSlider').addEventListener('input', updateValues);
+        document.getElementById('stepsSlider').addEventListener('input', updateValues);
+        document.getElementById('caloriesSlider').addEventListener('input', updateValues);
+
+        // Bar Chart
+        const barCtx = document.getElementById('barChart').getContext('2d');
+        const barChart = new Chart(barCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                datasets: [{
+                    label: 'Steps',
+                    data: [0, 0, 0, 0, 0, 0, 0], // Initial data
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                }]
+            }
+        });
+
+        // Donut Chart
+        const donutCtx = document.getElementById('donutChart').getContext('2d');
+        const donutChart = new Chart(donutCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Calories', 'Steps', 'Others'],
+                datasets: [{
+                    data: [0, 0, 0],
+                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56']
+                }]
+            }
+        });
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('loggedIn');
+            window.location.href = 'index.html';
+        }
+
+        if (!localStorage.getItem('loggedIn')) {
+            window.location.href = 'index.html';
+        }
+
+        // Initialize values when the page loads
+        updateValues();
+    </script>
+</body>
+</html>

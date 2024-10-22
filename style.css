@@ -1,0 +1,69 @@
+/* Resetting margins and paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+/* Navbar (sidebar) */
+nav {
+    background-color: #33475b;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    color: white;
+}
+
+/* Dashboard content */
+.dashboard-content {
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2.5rem;
+    color: #1a73e8;
+}
+
+/* Widgets and Cards */
+.card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card h2 {
+    color: #33475b;
+}
+
+.card p {
+    font-size: 1.25rem;
+    font-weight: bold;
+}
+
+/* Custom buttons */
+button {
+    background-color: #1a73e8;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #1558b5;
+}
+
+/* Sliders */
+input[type="range"] {
+    width: 100%;
+    margin-top: 10px;
+}
